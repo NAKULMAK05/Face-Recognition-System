@@ -1,8 +1,7 @@
 streamlit
 opencv-python-headless
-numpy
-torch
+numpy==1.25.2
+torch==2.0.1
 facenet-pytorch
 Pillow
-torchvision
-sqlite3
+torchvision==0.15.2
