@@ -1,7 +1,6 @@
-streamlit
-opencv-python-headless
-numpy==1.25.2
-torch==2.0.1
-facenet-pytorch
-Pillow
-torchvision==0.15.2
+streamlit==1.41.1
+opencv-python-headless==4.11.0.86
+numpy>=1.21.0
+torch>=2.0.1+cu118  # Adjust based on PyTorch compatibility with Python 3.12
+torchvision>=0.15.0  # If using torchvision, ensure compatibility
+setuptools>=67.0.0
