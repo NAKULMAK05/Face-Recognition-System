@@ -1,8 +1,8 @@
 streamlit
 opencv-python-headless
-facenet-pytorch
-torch
-torchvision
-pillow
 numpy
+torch
+facenet-pytorch
+Pillow
+torchvision
 sqlite3
