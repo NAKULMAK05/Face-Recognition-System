@@ -11,3 +11,4 @@ deepface==0.0.93
 mtcnn==1.0.0
 Pillow==10.4.0
 numpy==1.26.0 
+--upgrade pip
