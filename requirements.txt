@@ -5,5 +5,5 @@ facenet-pytorch
 torch
 Pillow
 numpy
-sqlite3 (builtin with Python)
+sqlite3
 torchvision
