@@ -5,5 +5,4 @@ facenet-pytorch
 torch
 Pillow
 numpy
-sqlite3
 torchvision
