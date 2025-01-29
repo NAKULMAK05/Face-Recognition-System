@@ -23,7 +23,7 @@ Ensure you have the following installed on your system:<br/>
 * Libraries mentioned in the requirements.txt<br/>
 <br/>
 
-**Installation**
+**Installation** 
 <br/>
 * **Clone this repository**:<br/>
 https://github.com/springboardmentor0328/Image_Recognition_System_Infosys_Internship_Oct2024.git <br/>
