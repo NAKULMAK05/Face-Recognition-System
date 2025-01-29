@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from facenet_pytorch import MTCNN, InceptionResnetV1
 from PIL import Image
-from torchvision import transforms
+from torchvision import transforms 
 import sqlite3
 import io
 import time
