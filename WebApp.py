@@ -197,15 +197,12 @@ if register_button:
 
         directions = ["Look Center", "Look Left", "Look Right", "Look Up", "Look Down"]
         images_per_direction = 12
-        frame_placeholder = st.empty()
-        progress_bar = st.progress(0)
-
         captured_frames = []
 
         def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
             image = frame.to_ndarray(format="bgr24")
             rgb_frame = image[:, :, ::-1]  # Convert BGR to RGB
-            
+
             height, width, _ = image.shape
             box_width, box_height = 200, 200
             center_x, center_y = width // 2, height // 2
@@ -220,11 +217,11 @@ if register_button:
                 face_pil = Image.fromarray(cv2.cvtColor(face, cv2.COLOR_BGR2RGB)).convert('RGB')
                 save_image_to_db(user_id, face_pil)
                 captured_frames.append(face)
-                progress_bar.progress(len(captured_frames) / (len(directions) * images_per_direction))
+                st.progress(len(captured_frames) / (len(directions) * images_per_direction))
             else:
                 st.success(f"Successfully captured images of {person_name} from different angles.")
                 webrtc_streamer.stop()
-            
+
             return av.VideoFrame.from_ndarray(image, format="bgr24")
 
         webrtc_streamer(key="face-registration", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
@@ -246,32 +243,33 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
     image = frame.to_ndarray(format="bgr24")
     img_rgb = image[:, :, ::-1]
     boxes, _ = mtcnn.detect(img_rgb)
-    
+
     if boxes is not None and len(boxes) > 0:
         for box in boxes:
             face_tensor = preprocess_face(img_rgb, box)
             with torch.no_grad():
                 encoding = model(face_tensor).cpu().numpy().flatten()
                 encoding = encoding / np.linalg.norm(encoding)
-            
+
             best_match, best_score = "Unknown", 0.5
             for person, person_encoding in encodings.items():
                 score = np.dot(encoding, person_encoding)
                 if score > best_score:
                     best_match = person
                     best_score = score
-            
+
             label = f"{best_match} ({round(best_score * 100, 2)}%)"
             color = (0, 255, 0) if best_match != "Unknown" else (255, 0, 0)
             x1, y1, x2, y2 = map(int, box)
             cv2.rectangle(image, (x1, y1), (x2, y2), color, 2)
-            cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
-    else:
-        cv2.putText(image, "Face Not Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-    
+            cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+
     return av.VideoFrame.from_ndarray(image, format="bgr24")
 
 if start_button:
     webrtc_streamer(key="face-recognition", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
+
+# Stop Face Recognition
 if stop_button:
     webrtc_streamer.stop()
+
