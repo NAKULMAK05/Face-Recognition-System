@@ -245,10 +245,6 @@ encodings = fetch_encodings_from_db()
 st.title("Real-Time Face Recognition with WebRTC")
 st.write("Start face recognition by clicking 'Start'.")
 
-start_button = st.button("Start Face Recognition")
-stop_button = st.button("Stop Face Recognition")
-frame_placeholder = st.empty()
-
 def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
     image = frame.to_ndarray(format="bgr24")
     img_rgb = image[:, :, ::-1]
