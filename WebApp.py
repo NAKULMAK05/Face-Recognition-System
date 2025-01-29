@@ -1,16 +1,12 @@
 import streamlit as st
-import cv2
-import os
+import sqlite3
+from PIL import Image
 import numpy as np
-from streamlit_webrtc import webrtc_streamer, WebRtcMode
 import torch
 from facenet_pytorch import MTCNN, InceptionResnetV1
-from PIL import Image
 from torchvision import transforms
-import sqlite3
 import io
-import time
-import av
+import os
 
 # Set up device
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -184,9 +180,6 @@ delete_button = st.button("Delete User")
 start_button = st.button("Start Face Recognition")
 stop_button = st.button("Stop Face Recognition")
 
-# Placeholder for the camera window
-frame_placeholder = st.empty()
-
 # Register User
 if register_button:
     if person_name:
@@ -201,34 +194,24 @@ if register_button:
         images_per_direction = 12
         captured_frames = []
 
-        def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
-            image = frame.to_ndarray(format="bgr24")
-            rgb_frame = image[:, :, ::-1]  # Convert BGR to RGB
+        # Start capturing images after registration
+        st.markdown("""
+            <script>
+                var constraints = {
+                    video: { facingMode: 'user' },
+                };
 
-            height, width, _ = image.shape
-            box_width, box_height = 200, 200
-            center_x, center_y = width // 2, height // 2
-            x1, y1 = center_x - box_width // 2, center_y - box_height // 2
-            x2, y2 = center_x + box_width // 2, center_y + box_height // 2
-
-            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(image, f"Please {directions[len(captured_frames) // images_per_direction]}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-            if len(captured_frames) < len(directions) * images_per_direction:
-                face = image[y1:y2, x1:x2]
-                face_pil = Image.fromarray(cv2.cvtColor(face, cv2.COLOR_BGR2RGB)).convert('RGB')
-                save_image_to_db(user_id, face_pil)
-                captured_frames.append(face)
-                st.progress(len(captured_frames) / (len(directions) * images_per_direction))
-            else:
-                st.success(f"Successfully captured images of {person_name} from different angles.")
-                webrtc_streamer.stop()
-
-            return av.VideoFrame.from_ndarray(image, format="bgr24")
-
-        # Display camera stream in the placeholder after clicking "Register"
-        frame_placeholder.empty()  # Clear placeholder first
-        webrtc_streamer(key="face-registration", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
+                navigator.mediaDevices.getUserMedia(constraints)
+                .then(function(stream) {
+                    var videoElement = document.getElementById("videoElement");
+                    videoElement.srcObject = stream;
+                })
+                .catch(function(error) {
+                    console.log("Error accessing media devices:", error);
+                });
+            </script>
+            <video id="videoElement" width="100%" height="100%" autoplay></video>
+        """, unsafe_allow_html=True)
 
 # Delete User
 if delete_button:
@@ -275,10 +258,8 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
 
     return av.VideoFrame.from_ndarray(image, format="bgr24")
 
-# Display live camera feed in placeholder after clicking "Start Face Recognition"
 if start_button:
     webrtc_streamer(key="face-recognition", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
 
-# Stop Face Recognition
 if stop_button:
     webrtc_streamer.stop()
