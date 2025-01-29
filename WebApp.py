@@ -6,6 +6,7 @@ import torch
 from facenet_pytorch import MTCNN, InceptionResnetV1
 from torchvision import transforms
 import io
+import av
 import os
 
 # Set up device
