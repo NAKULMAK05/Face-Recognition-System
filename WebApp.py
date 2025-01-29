@@ -183,7 +183,7 @@ delete_name = st.text_input("Enter the name of the user to delete:")
 delete_button = st.button("Delete User")
 start_button = st.button("Start Face Recognition")
 stop_button = st.button("Stop Face Recognition")
-frame_placeholder = st.empty()
+frame_placeholder = st.placeholder()  # Updated placeholder usage
 
 # Register User
 if register_button:
@@ -259,7 +259,7 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
                     best_score = score
 
             label = f"{best_match} ({round(best_score * 100, 2)}%)"
-            color = (0, 255, 0) if best_match != "Unknown" else (255, 0, 0)
+            color = (0, 255, 0) if best_match != "Unknown" else (0, 0, 255)
             x1, y1, x2, y2 = map(int, box)
             cv2.rectangle(image, (x1, y1), (x2, y2), color, 2)
             cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
@@ -269,7 +269,5 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
 if start_button:
     webrtc_streamer(key="face-recognition", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
 
-# Stop Face Recognition
 if stop_button:
     webrtc_streamer.stop()
-
