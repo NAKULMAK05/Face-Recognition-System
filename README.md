@@ -16,7 +16,7 @@ The image recognition project aims to develop a system capable of recognising in
 using the instructions given below. <br/>
 
 **Requirements**<br/>
-Ensure you have the following installed on your system:<br/>
+Ensure you have the following installed on your system:<br/> 
 
 * Python 3.8 or higher<br/>
 * A webcam<br/>
