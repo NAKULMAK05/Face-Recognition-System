@@ -240,11 +240,11 @@ if delete_button:
         st.error("Please enter a valid name.")
 
 # Start Face Recognition
-model = torch.nn.Identity()  # Placeholder for actual model
 encodings = fetch_encodings_from_db()
 
-st.title("Real-Time Face Recognition with WebRTC")
-st.write("Start face recognition by clicking 'Start'.")
+start_button = st.button("Start Face Recognition")
+stop_button = st.button("Stop Face Recognition")
+frame_placeholder = st.empty()
 
 def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
     image = frame.to_ndarray(format="bgr24")
@@ -279,4 +279,4 @@ if start_button:
     webrtc_streamer(key="face-recognition", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
 
 if stop_button:
-    st.write("Face recognition stopped.")
+    webrtc_streamer.stop()
