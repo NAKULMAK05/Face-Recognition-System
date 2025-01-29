@@ -273,6 +273,5 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
 
 if start_button:
     webrtc_streamer(key="face-recognition", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
-
 if stop_button:
     webrtc_streamer.stop()
