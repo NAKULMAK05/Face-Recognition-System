@@ -183,7 +183,9 @@ delete_name = st.text_input("Enter the name of the user to delete:")
 delete_button = st.button("Delete User")
 start_button = st.button("Start Face Recognition")
 stop_button = st.button("Stop Face Recognition")
-frame_placeholder = st.placeholder()  # Updated placeholder usage
+
+# Placeholder for the camera window
+frame_placeholder = st.empty()
 
 # Register User
 if register_button:
@@ -224,6 +226,8 @@ if register_button:
 
             return av.VideoFrame.from_ndarray(image, format="bgr24")
 
+        # Display camera stream in the placeholder after clicking "Register"
+        frame_placeholder.empty()  # Clear placeholder first
         webrtc_streamer(key="face-registration", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
 
 # Delete User
@@ -251,23 +255,30 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
                 encoding = model(face_tensor).cpu().numpy().flatten()
                 encoding = encoding / np.linalg.norm(encoding)
 
-            best_match, best_score = "Unknown", 0.5
-            for person, person_encoding in encodings.items():
-                score = np.dot(encoding, person_encoding)
-                if score > best_score:
-                    best_match = person
+            best_match, best_score = None, float('inf')
+            for name, db_encoding in encodings.items():
+                score = np.linalg.norm(encoding - db_encoding)
+                if score < best_score:
                     best_score = score
+                    best_match = name
 
-            label = f"{best_match} ({round(best_score * 100, 2)}%)"
-            color = (0, 255, 0) if best_match != "Unknown" else (0, 0, 255)
+            if best_match is not None:
+                label = f"Recognized: {best_match}"
+                color = (0, 255, 0)
+            else:
+                label = "Unknown"
+                color = (0, 0, 255)
+            
             x1, y1, x2, y2 = map(int, box)
             cv2.rectangle(image, (x1, y1), (x2, y2), color, 2)
             cv2.putText(image, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
     return av.VideoFrame.from_ndarray(image, format="bgr24")
 
+# Display live camera feed in placeholder after clicking "Start Face Recognition"
 if start_button:
     webrtc_streamer(key="face-recognition", mode=WebRtcMode.SENDRECV, video_frame_callback=video_frame_callback)
 
+# Stop Face Recognition
 if stop_button:
     webrtc_streamer.stop()
