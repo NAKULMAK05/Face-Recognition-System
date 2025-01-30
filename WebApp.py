@@ -1,6 +1,5 @@
 import streamlit as st
 import cv2
-import os
 import numpy as np
 import torch
 from facenet_pytorch import MTCNN, InceptionResnetV1
@@ -181,78 +180,76 @@ register_button = st.button("Register User")
 delete_name = st.text_input("Enter the name of the user to delete:")
 delete_button = st.button("Delete User")
 start_button = st.button("Start Face Recognition")
-stop_button = st.button("Stop Face Recognition")
 
 # Register User
-if register_button:
-    if person_name:
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO users (name) VALUES (?)', (person_name,))
-        user_id = cursor.lastrowid
-        conn.commit()
-        conn.close()
+if register_button and person_name:
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO users (name) VALUES (?)', (person_name,))
+    user_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
 
-        directions = ["Look Center", "Look Left", "Look Right", "Look Up", "Look Down"]
-        count = 0
-        images_per_direction = 12
-        progress_bar = st.progress(0)
+    st.write("Please look at the camera and follow the instructions.")
+    directions = ["Look Center", "Look Left", "Look Right", "Look Up", "Look Down"]
+    count = 0
+    images_per_direction = 12
+    progress_bar = st.progress(0)
 
-        # Define central bounding box dimensions
-        box_width, box_height = 200, 200
+    # Define central bounding box dimensions
+    box_width, box_height = 200, 200
 
-        for direction in directions:
-            time.sleep(1)
+    for direction in directions:
+        time.sleep(1)
 
-            for _ in range(images_per_direction):
-                # Capture image using WebRTC
-                webrtc_ctx = webrtc_streamer(
-                    key="register",
-                    mode=WebRtcMode.SENDRECV,
-                    rtc_configuration=RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
-                    video_frame_callback=lambda frame: frame.to_ndarray(format="bgr24")
-                )
+        for _ in range(images_per_direction):
+            # Capture image using WebRTC
+            webrtc_ctx = webrtc_streamer(
+                key="register",
+                mode=WebRtcMode.SENDRECV,
+                rtc_configuration=RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
+                video_frame_callback=lambda frame: frame.to_ndarray(format="bgr24")
+            )
 
-                if webrtc_ctx.video_receiver:
-                    frame = webrtc_ctx.video_receiver.get_frame()
-                    if frame is not None:
-                        # Draw a central fixed bounding box
-                        center_x, center_y = int(frame.shape[1] / 2), int(frame.shape[0] / 2)
-                        x1 = center_x - box_width // 2
-                        y1 = center_y - box_height // 2
-                        x2 = center_x + box_width // 2
-                        y2 = center_y + box_height // 2
+            if webrtc_ctx.video_receiver:
+                frame = webrtc_ctx.video_receiver.get_frame()
+                if frame is not None:
+                    # Draw a central fixed bounding box
+                    center_x, center_y = int(frame.shape[1] / 2), int(frame.shape[0] / 2)
+                    x1 = center_x - box_width // 2
+                    y1 = center_y - box_height // 2
+                    x2 = center_x + box_width // 2
+                    y2 = center_y + box_height // 2
 
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                        cv2.putText(frame, f"Please {direction}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    cv2.putText(frame, f"Please {direction}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-                        # Crop face within the fixed bounding box
-                        face = frame[y1:y2, x1:x2]
-                        face_pil = Image.fromarray(cv2.cvtColor(face, cv2.COLOR_BGR2RGB)).convert('RGB')
-                        save_image_to_db(user_id, face_pil)
+                    # Crop face within the fixed bounding box
+                    face = frame[y1:y2, x1:x2]
+                    face_pil = Image.fromarray(cv2.cvtColor(face, cv2.COLOR_BGR2RGB)).convert('RGB')
+                    save_image_to_db(user_id, face_pil)
 
-                        count += 1
-                        progress_bar.progress(count / (len(directions) * images_per_direction))
-                        st.image(frame, channels="BGR")
-                        time.sleep(0.1)
+                    count += 1
+                    progress_bar.progress(count / (len(directions) * images_per_direction))
+                    st.image(frame, channels="BGR")
+                    time.sleep(0.1)
 
-        st.success(f"Successfully captured images of {person_name} from different angles.")
+    st.success(f"Successfully captured images of {person_name} from different angles.")
 
 # Delete User
-if delete_button:
-    if delete_name:
-        if delete_user_by_name(delete_name):
-            st.success(f"User '{delete_name}' and their associated images have been deleted successfully!")
-        else:
-            st.error(f"User '{delete_name}' not found in the database.")
+if delete_button and delete_name:
+    if delete_user_by_name(delete_name):
+        st.success(f"User '{delete_name}' and their associated images have been deleted successfully!")
     else:
-        st.error("Please enter a valid name.")
+        st.error(f"User '{delete_name}' not found in the database.")
 
 # Start Face Recognition
 if start_button:
     # Load encodings from the database
     encodings = fetch_encodings_from_db()
     
+    st.write("Face recognition started. Look at the camera.")
+
     # Start the WebRTC stream
     webrtc_ctx = webrtc_streamer(
         key="recognize",
@@ -262,41 +259,36 @@ if start_button:
     )
 
     if webrtc_ctx.video_receiver:
-        st.write("Face recognition started. Press 'Stop' to end.")
-        
-        while not stop_button:
-            frame = webrtc_ctx.video_receiver.get_frame()
-            if frame is not None:
-                # Convert frame to RGB
-                img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                boxes, _ = mtcnn.detect(img_rgb)
+        frame = webrtc_ctx.video_receiver.get_frame()
+        if frame is not None:
+            # Convert frame to RGB
+            img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            boxes, _ = mtcnn.detect(img_rgb)
 
-                if boxes is not None and len(boxes) > 0:
-                    for box in boxes:
-                        # Preprocess the face and get its encoding
-                        face_tensor = preprocess_face(img_rgb, box)
-                        with torch.no_grad():
-                            encoding = model(face_tensor).cpu().numpy().flatten()
-                            encoding = encoding / np.linalg.norm(encoding)
+            if boxes is not None and len(boxes) > 0:
+                for box in boxes:
+                    # Preprocess the face and get its encoding
+                    face_tensor = preprocess_face(img_rgb, box)
+                    with torch.no_grad():
+                        encoding = model(face_tensor).cpu().numpy().flatten()
+                        encoding = encoding / np.linalg.norm(encoding)
 
-                        # Compare the encoding with database encodings
-                        best_match, best_score = "Unknown", 0.5
-                        for person, person_encoding in encodings.items():
-                            score = np.dot(encoding, person_encoding)
-                            if score > best_score:
-                                best_match = person
-                                best_score = score
+                    # Compare the encoding with database encodings
+                    best_match, best_score = "Unknown", 0.5
+                    for person, person_encoding in encodings.items():
+                        score = np.dot(encoding, person_encoding)
+                        if score > best_score:
+                            best_match = person
+                            best_score = score
 
-                        # Display the result on the frame
-                        label = f"{best_match} ({round(best_score * 100, 2)}%)"
-                        color = (0, 255, 0) if best_match != "Unknown" else (255, 0, 0)
-                        x1, y1, x2, y2 = map(int, box)
-                        cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                        cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
-                else:
-                    cv2.putText(frame, "Face Not Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
+                    # Display the result on the frame
+                    label = f"{best_match} ({round(best_score * 100, 2)}%)"
+                    color = (0, 255, 0) if best_match != "Unknown" else (255, 0, 0)
+                    x1, y1, x2, y2 = map(int, box)
+                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                    cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+            else:
+                cv2.putText(frame, "Face Not Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
 
-                # Display the frame
-                st.image(frame, channels="BGR")
-
-        st.write("Face recognition stopped.")
+            # Display the frame
+            st.image(frame, channels="BGR")
