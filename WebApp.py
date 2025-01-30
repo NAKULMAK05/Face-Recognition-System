@@ -203,9 +203,12 @@ if register_button and person_name:
         time.sleep(1)
 
         for _ in range(images_per_direction):
+            # Generate a unique key for the WebRTC component
+            unique_key = f"register_{direction}_{count}"
+            
             # Capture image using WebRTC
             webrtc_ctx = webrtc_streamer(
-                key="register",
+                key=unique_key,  # Use a unique key for each WebRTC instance
                 mode=WebRtcMode.SENDRECV,
                 rtc_configuration=RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
                 video_frame_callback=lambda frame: frame.to_ndarray(format="bgr24")
@@ -250,9 +253,12 @@ if start_button:
     
     st.write("Face recognition started. Look at the camera.")
 
+    # Generate a unique key for the WebRTC component
+    unique_key = "recognize"
+
     # Start the WebRTC stream
     webrtc_ctx = webrtc_streamer(
-        key="recognize",
+        key=unique_key,  # Use a unique key for the WebRTC instance
         mode=WebRtcMode.SENDRECV,
         rtc_configuration=RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
         video_frame_callback=lambda frame: frame.to_ndarray(format="bgr24")
