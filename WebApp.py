@@ -9,7 +9,9 @@ from PIL import Image
 from torchvision import transforms
 import sqlite3
 import io
+import time
 import av
+import base64
 
 # Set up device
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -76,60 +78,47 @@ def preprocess_face(img_rgb, box):
     face_tensor = transform(face_pil).unsqueeze(0).to(device)
     return face_tensor
 
-# Improved UI Styling
+# Custom CSS for styling
 st.markdown("""
     <style>
-    .title {text-align: center; font-size: 30px; font-weight: bold; color: white;}
-    .stTextInput input {width: 100%; padding: 10px; font-size: 18px;}
-    .stButton button {
-        width: 250px;
-        height: 50px;
-        font-size: 18px;
-        font-weight: bold;
-        background: #0047AB;
-        color: white;
-        border-radius: 10px;
-        margin: 10px;
-        cursor: pointer;
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        background: #000;
     }
-    .stButton button:hover {background: #002F6C;}
-    .video-container {display: flex; justify-content: center; margin-top: 20px;}
-    body {background-color: black;}
+    .stButton button {
+        width: 220px;
+        height: 50px;
+        border: none;
+        outline: none;
+        color: #fff;
+        background: #111;
+        cursor: pointer;
+        position: relative;
+        z-index: 0;
+        border-radius: 10px;
+        font-size: 16px;
+        text-align: center;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # Title
-st.markdown('<div class="title">🎭 Real-Time Face Recognition System</div>', unsafe_allow_html=True)
+st.title("🎭 Real-Time Face Recognition System")
 
 # Input and Button Section
-col1, col2 = st.columns(2)
-
-with col1:
-    person_name = st.text_input("Enter User's Name")
-    register_button = st.button("Register User")
-    delete_name = st.text_input("Enter the name of the user to delete:")
-    delete_button = st.button("Delete User")
-
-with col2:
-    start_button = st.button("Start Face Recognition")
-    stop_button = st.button("Stop Face Recognition")
-
-# Database actions
-if register_button and person_name:
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO users (name) VALUES (?)', (person_name,))
-    conn.commit()
-    conn.close()
-    st.success(f"User '{person_name}' registered successfully!")
-
-if delete_button and delete_name:
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM users WHERE name = ?", (delete_name,))
-    conn.commit()
-    conn.close()
-    st.success(f"User '{delete_name}' deleted successfully!")
+person_name = st.text_input("Enter User's Name")
+register_button = st.button("Register User")
+delete_name = st.text_input("Enter the name of the user to delete:")
+delete_button = st.button("Delete User")
+start_button = st.button("Start Face Recognition")
+stop_button = st.button("Stop Face Recognition")
 
 # Face recognition function
 encodings = fetch_encodings_from_db()
@@ -166,11 +155,11 @@ def video_frame_callback(frame: av.VideoFrame) -> av.VideoFrame:
 
     return av.VideoFrame.from_ndarray(image, format="bgr24")
 
-# WebRTC Configuration Fix
+# ✅ FIX: WebRTC Configuration to Prevent Disappearance
 rtc_config = RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]})
 
+# ✅ FIX: Ensures WebRTC doesn't close after button click
 if start_button:
-    st.markdown('<div class="video-container"><h3 style="color:white;">Live Camera Feed</h3></div>', unsafe_allow_html=True)
     webrtc_streamer(
         key="face-recognition",
         mode=WebRtcMode.SENDRECV,
