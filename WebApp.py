@@ -257,44 +257,40 @@ if start_button:
     unique_key = "recognize"
 
     # Start the WebRTC stream
+    def video_frame_callback(frame):
+        img_rgb = cv2.cvtColor(frame.to_ndarray(format="bgr24"), cv2.COLOR_BGR2RGB)
+        boxes, _ = mtcnn.detect(img_rgb)
+
+        if boxes is not None and len(boxes) > 0:
+            for box in boxes:
+                # Preprocess the face and get its encoding
+                face_tensor = preprocess_face(img_rgb, box)
+                with torch.no_grad():
+                    encoding = model(face_tensor).cpu().numpy().flatten()
+                    encoding = encoding / np.linalg.norm(encoding)
+
+                # Compare the encoding with database encodings
+                best_match, best_score = "Unknown", 0.5
+                for person, person_encoding in encodings.items():
+                    score = np.dot(encoding, person_encoding)
+                    if score > best_score:
+                        best_match = person
+                        best_score = score
+
+                # Display the result on the frame
+                label = f"{best_match} ({round(best_score * 100, 2)}%)"
+                color = (0, 255, 0) if best_match != "Unknown" else (255, 0, 0)
+                x1, y1, x2, y2 = map(int, box)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
+        else:
+            cv2.putText(frame, "Face Not Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
+
+        return frame
+
     webrtc_ctx = webrtc_streamer(
         key=unique_key,  # Use a unique key for the WebRTC instance
         mode=WebRtcMode.SENDRECV,
         rtc_configuration=RTCConfiguration({"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}),
-        video_frame_callback=lambda frame: frame.to_ndarray(format="bgr24")
+        video_frame_callback=video_frame_callback
     )
-
-    if webrtc_ctx.video_receiver:
-        frame = webrtc_ctx.video_receiver.get_frame()
-        if frame is not None:
-            # Convert frame to RGB
-            img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            boxes, _ = mtcnn.detect(img_rgb)
-
-            if boxes is not None and len(boxes) > 0:
-                for box in boxes:
-                    # Preprocess the face and get its encoding
-                    face_tensor = preprocess_face(img_rgb, box)
-                    with torch.no_grad():
-                        encoding = model(face_tensor).cpu().numpy().flatten()
-                        encoding = encoding / np.linalg.norm(encoding)
-
-                    # Compare the encoding with database encodings
-                    best_match, best_score = "Unknown", 0.5
-                    for person, person_encoding in encodings.items():
-                        score = np.dot(encoding, person_encoding)
-                        if score > best_score:
-                            best_match = person
-                            best_score = score
-
-                    # Display the result on the frame
-                    label = f"{best_match} ({round(best_score * 100, 2)}%)"
-                    color = (0, 255, 0) if best_match != "Unknown" else (255, 0, 0)
-                    x1, y1, x2, y2 = map(int, box)
-                    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                    cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 2)
-            else:
-                cv2.putText(frame, "Face Not Detected", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-
-            # Display the frame
-            st.image(frame, channels="BGR")
