@@ -14,7 +14,7 @@ The image recognition project aims to develop a system capable of recognising in
 **FaceRecognitionApp.py** : This file is the main application for Face Recognition . Run This File 
 using the instructions given below. <br/>
 
-**Requirements**<br/>
+**Requirements**<br/> 
 Ensure you have the following installed on your system:<br/> 
 
 * Python 3.8 or higher<br/> 
