@@ -29,7 +29,7 @@ https://github.com/springboardmentor0328/Image_Recognition_System_Infosys_Intern
 <br/>
  
 * **Install the required Python libraries**:<br/> 
-pip install -r requirements.txt
+pip install -r requirements.txt 
 
 **Required Libraries:**<br/>
 
