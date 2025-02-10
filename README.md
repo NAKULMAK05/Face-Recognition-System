@@ -21,7 +21,7 @@ Ensure you have the following installed on your system:<br/>
 * A webcam<br/>
 * Libraries mentioned in the requirements.txt<br/>
 <br/>
-
+ 
 **Installation** 
 <br/> 
 * **Clone this repository**:<br/>
