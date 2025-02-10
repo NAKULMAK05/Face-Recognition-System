@@ -28,7 +28,7 @@ Ensure you have the following installed on your system:<br/>
 https://github.com/springboardmentor0328/Image_Recognition_System_Infosys_Internship_Oct2024.git <br/>
 <br/>
 
-* **Install the required Python libraries**:<br/>
+* **Install the required Python libraries**:<br/> 
 pip install -r requirements.txt
 
 **Required Libraries:**<br/>
