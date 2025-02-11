@@ -36,7 +36,7 @@ pip install -r requirements.txt
 * streamlit
 * opencv-python
 * facenet-pytorch
-* torch
+* torch 
 * Pillow
 * numpy
 * sqlite3 (builtin with Python) 
