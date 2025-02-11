@@ -39,7 +39,7 @@ pip install -r requirements.txt
 * torch
 * Pillow
 * numpy
-* sqlite3 (builtin with Python)
+* sqlite3 (builtin with Python) 
 * torchvision
 
 <br/>
