@@ -9,7 +9,7 @@ The image recognition project aims to develop a system capable of recognising in
 * **User Management**: Add user profiles.<br/> 
 * **Glowing Button UI**: Aesthetic UI design with glowing buttons for better user experience.<br/>
 <br/>
-  
+    
 **Face Recogntion.ipynb** : This file contains the Python code for the Face Recognition Model<br/> 
 **FaceRecognitionApp.py** : This file is the main application for Face Recognition . Run This File 
 using the instructions given below. <br/>
