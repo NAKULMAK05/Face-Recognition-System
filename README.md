@@ -7,7 +7,7 @@ The image recognition project aims to develop a system capable of recognising in
 * **Face Registration**: Capture images from multiple angles to register a user in the database.<br/>
 * **Real-Time Recognition**: Recognize faces in live webcam feed.<br/> 
 * **User Management**: Add user profiles.<br/> 
-* **Glowing Button UI**: Aesthetic UI design with glowing buttons for better user experience.<br/>
+* **Glowing Button UI**: Aesthetic UI design with glowing buttons for better user experience.<br/> 
 <br/>
     
 **Face Recogntion.ipynb** : This file contains the Python code for the Face Recognition Model<br/>  
