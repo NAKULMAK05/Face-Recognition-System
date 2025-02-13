@@ -30,7 +30,7 @@ https://github.com/springboardmentor0328/Image_Recognition_System_Infosys_Intern
   
 * **Install the required Python libraries**:<br/> 
 pip install -r requirements.txt 
-
+ 
 **Required Libraries:**<br/> 
 
 * streamlit
