@@ -18,7 +18,7 @@ using the instructions given below. <br/>
 Ensure you have the following installed on your system:<br/>  
  
 * Python 3.8 or higher<br/> 
-* A webcam<br/>
+* A webcam<br/> 
 * Libraries mentioned in the requirements.txt<br/> 
 <br/>
   
