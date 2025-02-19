@@ -6,7 +6,7 @@ The image recognition project aims to develop a system capable of recognising in
 **Features**<br/>
 * **Face Registration**: Capture images from multiple angles to register a user in the database.<br/>
 * **Real-Time Recognition**: Recognize faces in live webcam feed.<br/>  
-* **User Management**: Add user profiles.<br/>   
+* **User Management**: Add user profiles.<br/>    
 * **Glowing Button UI**: Aesthetic UI design with glowing buttons for better user experience.<br/> 
 <br/>
      
