@@ -11,7 +11,7 @@ The image recognition project aims to develop a system capable of recognising in
 <br/>
      
 **Face Recogntion.ipynb** : This file contains the Python code for the Face Recognition Model<br/>  
-**FaceRecognitionApp.py** : This file is the main application for Face Recognition . Run This File  
+**WebApp.py** : This file is the main application for Face Recognition . Run This File  
 using the instructions given below. <br/>
  
 **Requirements**<br/> 
@@ -25,7 +25,7 @@ Ensure you have the following installed on your system:<br/>
 **Installation** 
 <br/> 
 * **Clone this repository**:<br/>
-https://github.com/springboardmentor0328/Image_Recognition_System_Infosys_Internship_Oct2024.git <br/> 
+https://github.com/NAKULMAK05/Face-Recognition-System.git <br/> 
 <br/>  
   
 * **Install the required Python libraries**:<br/> 
