@@ -101,8 +101,56 @@ If False, the app will run on CPU.
 **Performance Issues**
 * Check GPU support for faster processing.<br/>
 * Reduce the number of faces to be recognized simultaneously.<br/>
+<br/>
+<br/>
+
+
+**Outputs**
+
+
+<br/>
+<br/>
 
   
+**1)Home Page**
 
 
+  <br/>
+  <br/>
+  <img width="959" alt="facerec" src="https://github.com/user-attachments/assets/511d5031-ed4f-4e66-8de7-87e4e1289bb4" />
+  <br/>
+  <br/>
+  
+  **2)Face Registration**
+
+  
+  <br/>
+  <br/>
+  <img width="959" alt="reg" src="https://github.com/user-attachments/assets/ddb6c103-4790-44da-81bf-616fcfe4e3e2" />
+     <br/>
+     <br/>
+
+     
+ **3)Face Recognition**
+<br/>
+<br/>
+ <img width="959" alt="recog" src="https://github.com/user-attachments/assets/9099cbbc-b1b1-4eef-bd19-814934fd8901" />
+
+  <br/>
+  <br/>
+
+ **4)Multi Faces Recognition**
+<br/>
+<br/>
+<img width="959" alt="MultiFaces" src="https://github.com/user-attachments/assets/fce3e652-d214-4aa7-bf4b-2fb5992de398" />
+  <br/>
+  <br/>
+
+  **5)Edge Cases (Unknown or Face Not Detected)**
+  <br/>
+  <br/>
+<img width="959" alt="unk" src="https://github.com/user-attachments/assets/426bad9e-5858-4001-bfc4-6d58bea805ba" />
+<img width="959" alt="FND" src="https://github.com/user-attachments/assets/25cf41ed-c10a-4748-84b6-a9923bce3fc8" />
+
+<br/><br/>
 
