@@ -84,6 +84,14 @@ If False, the app will run on CPU.
 <br/>
 <br/>
 
+**Future Scope**
+<br/>
+<br/>
+* Can be Used in Automated Attendance System.<br/>
+* Since the Accuracy is Well , so can be used to detect Faces from CCTV cameras .<br/>
+<br/>
+<br/>
+
 **Troubleshooting**
 <br/>
 <br/>
