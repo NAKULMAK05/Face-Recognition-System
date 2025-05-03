@@ -1,7 +1,7 @@
 # Face Recognition System
 The image recognition project aims to develop a system capable of recognising individuals using a laptop's camera. This system leverages computer vision techniques to capture real-time images and process them for face identification.<br/>
 
-**This is a real-time face recognition app built with Python, Streamlit, and FaceNet PreTrained model . It enables users to register and recognize faces using webcam input.**
+**This is a real-time face recognition app built with Python, Streamlit, and FaceNet PreTrained model . It enables users to register and recognize faces using webcam input.** 
 
 **Features**<br/>
 * **Face Registration**: Capture images from multiple angles to register a user in the database.<br/>
