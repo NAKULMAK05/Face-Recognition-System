@@ -1,117 +1,157 @@
-# Face Recognition System
-The image recognition project aims to develop a system capable of recognising individuals using a laptop's camera. This system leverages computer vision techniques to capture real-time images and process them for face identification.<br/>
+# 🔐 InSight ID – AI-Based Face Recognition
 
-**This is a real-time face recognition app built with Python, Streamlit, and FaceNet PreTrained model . It enables users to register and recognize faces using webcam input.** 
+An advanced and accurate real-time face recognition application built with Python, Streamlit, and a pre-trained FaceNet model. This system enables users to register and recognize faces using webcam input, offering a user-friendly interface with glowing buttons for enhanced user experience.
 
-**Features**<br/>
-* **Face Registration**: Capture images from multiple angles to register a user in the database.<br/>
-* **Real-Time Recognition**: Recognize multiple faces in live webcam feed.<br/>  
-* **User Management**: Add user profiles.<br/>    
-* **Glowing Button UI**: Aesthetic UI design with glowing buttons for better user experience.<br/> 
-<br/>
-     
-**Face Recogntion.ipynb** : This file contains the Python code for the Face Recognition Model<br/>  
-**WebApp.py** : This file is the main application for Face Recognition . Run This File  
-using the instructions given below. <br/>
- 
-**Requirements**<br/> 
-Ensure you have the following installed on your system:<br/>  
- 
-* Python 3.8 or higher<br/> 
-* A webcam<br/> 
-* Libraries mentioned in the requirements.txt<br/> 
-<br/>
-    
-**Installation** 
-<br/> 
-* **Clone this repository**:<br/>
-https://github.com/NAKULMAK05/Face-Recognition-System.git <br/> 
-<br/>  
-  
-* **Install the required Python libraries**:<br/> 
-pip install -r requirements.txt 
- 
-**Required Libraries:**<br/> 
+---
 
-* streamlit
-* opencv-python
-* facenet-pytorch
-* torch 
-* Pillow
-* numpy
-* sqlite3 (builtin with Python) 
-* torchvision
+## 🚀 Features
 
-<br/>
+* **Face Registration**: Capture images from multiple angles to register a user in the database.
+* **Real-Time Recognition**: Recognize multiple faces in live webcam feed.
+* **User Management**: Add and manage user profiles.
+* **Aesthetic UI**: Interactive interface with glowing buttons for better user experience.
 
-**Verify GPU support for better performance (optional):** 
-<br/>
-python -c "import torch; print(torch.cuda.is_available())" <br/>
-<br/>
-If False, the app will run on CPU.
-<br/>
-<br/>
-**How to Run the App**<br/>
-<br/>
-* Start the app: streamlit run webApp.py <br/>
-* Open the URL displayed in your terminal (e.g., http://localhost:8501) in your web browser.<br/>
-<br/>
-<br/>
+---
 
-**Usage Instructions**
-<br/>
-<br/>
+## 🛠️ Technologies Used
 
-**Register a User**<br/>
-<br/>
-* Enter the name of the user in the input box.<br/>
-* Click "Register User" and follow the on-screen directions (e.g., "Look Left").<br/>
-* Once completed, the user will be added to the database.<br/>
-<br/>
+* **Programming Language**: Python 3.8+
+* **Libraries**:
 
-**Start Face Recognition**<br/>
-<br/>
-* Click "Start Face Recognition".<br/>
-* The app will display a live webcam feed, highlighting recognized faces and displaying their names.<br/>
+  * Streamlit
+  * OpenCV
+  * FaceNet-PyTorch
+  * Torch
+  * Pillow
+  * NumPy
+  * SQLite3 (built-in with Python)
+  * Torchvision
 
-<br/>
-<br/>
+---
 
-**Stop Face Recognition**
-<br/>
-<br/>
-* Click "Stop Face Recognition" to end the recognition process.<br/>
-<br/>
-<br/>
+## 📁 Repository Structure
 
-**Future Scope**
-<br/>
-<br/>
-* Can be Used in Automated Attendance System.<br/>
-* Since the Accuracy is Well , so can be used to detect Faces from CCTV cameras .<br/>
-<br/>
-<br/>
+```
 
-**Troubleshooting**
-<br/>
-<br/>
-**Webcam Not Working**
-* Ensure your webcam is properly connected.<br/>
-* Restart the app and check permissions for webcam access.<br/>
+├── Face Recognition (1).ipynb    # Jupyter notebook for model development
+├── Final_Face_Recog.py           # Core face recognition script
+├── WebApp.py                     # Main Streamlit application
+├── requirements.txt              # List of dependencies
+├── packages.txt                  # Additional package information
+└── README.md                     # Project documentation
+```
 
-<br/>
 
-**Face Not Detected**
-* Ensure the lighting is sufficient.<br/>
-* Adjust your position for better visibility of your face.<br/>
-  <br/>
 
-**Performance Issues**
-* Check GPU support for faster processing.<br/>
-* Reduce the number of faces to be recognized simultaneously.<br/>
-<br/>
-<br/>
+---
 
+## ⚙️ Installation
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone https://github.com/NAKULMAK05/Face-Recognition-System.git
+   cd Face-Recognition-System
+   ```
+
+
+
+2. **Create and activate a virtual environment**:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+
+
+3. **Install the required Python libraries**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+
+
+4. **Verify GPU support for better performance (optional)**:
+
+   ```bash
+   python -c "import torch; print(torch.cuda.is_available())"
+   ```
+
+
+
+---
+
+## 🖥️ How to Run the Application
+
+1. **Start the Streamlit app**:
+
+   ```bash
+   streamlit run WebApp.py
+   ```
+
+
+
+2. **Open the URL displayed in your terminal (e.g., [http://localhost:8501](http://localhost:8501)) in your web browser**.
+
+---
+
+## 🧪 Usage Instructions
+
+### Register a User
+
+* Enter the name of the user in the input box.
+* Click "Register User" and follow the on-screen directions (e.g., "Look Left").
+* Once completed, the user will be added to the database.
+
+### Start Face Recognition
+
+* Click "Start Face Recognition".
+* The app will display a live webcam feed, highlighting recognized faces and displaying their names.
+
+### Stop Face Recognition
+
+* Click "Stop Face Recognition" to end the recognition process.
+
+---
+
+## 📷 Outputs
+
+* **Home Page**: Landing page of the application.
+* **Face Registration**: Interface for registering new users.
+* **Face Recognition**: Real-time face recognition interface.
+* **Multi-Face Recognition**: Recognize multiple faces simultaneously.
+* **Edge Cases**: Handles unknown faces or when a face is not detected.
+
+---
+
+## 🔧 Troubleshooting
+
+* **Webcam Not Working**:
+
+  * Ensure your webcam is properly connected.
+  * Restart the app and check permissions for webcam access.
+
+* **Face Not Detected**:
+
+  * Ensure the lighting is sufficient.
+  * Adjust your position for better visibility of your face.
+
+* **Performance Issues**:
+
+  * Check GPU support for faster processing.
+  * Reduce the number of faces to be recognized simultaneously.
+
+---
+
+## 📈 Future Scope
+
+* Integration into automated attendance systems.
+* Deployment for surveillance and security applications.
+* Enhancements for mobile and edge devices.
+
+---
 
 **Outputs**
 
@@ -162,3 +202,20 @@ If False, the app will run on CPU.
 
 <br/><br/>
 
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+*Empowering secure and seamless identification through cutting-edge technology.*
+
+---
